@@ -10,7 +10,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class Task{
     private String title;
     private String content;
-    private Category category;
+    private TaskCategory taskCategory;
     private TaskStatus taskStatus;
 //    private LocalDate creationDate=LocalDate.now();
 //    private LocalDate creationTime = LocalDate.now();

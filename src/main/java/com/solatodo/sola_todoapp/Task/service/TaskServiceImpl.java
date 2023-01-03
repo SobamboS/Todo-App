@@ -21,7 +21,7 @@ public class TaskServiceImpl implements TaskService{
     public CreateTaskResponse createTask(CreateTaskRequest createTaskRequest){
         Task task = new Task();
         task.setTaskStatus(createTaskRequest.getTaskStatus());
-        task.setCategory(createTaskRequest.getCategory());
+        task.setTaskCategory(createTaskRequest.getTaskCategory());
         task.setContent(createTaskRequest.getContent());
        Task createdTask = taskRepository.save(task);
         return new CreateTaskResponse("Task created", 201);
