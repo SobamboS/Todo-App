@@ -1,14 +1,13 @@
 package com.solatodo.sola_todoapp.Task.service;
 
-import com.solatodo.sola_todoapp.Task.exception.TaskException;
 import com.solatodo.sola_todoapp.Task.data.model.Task;
 import com.solatodo.sola_todoapp.Task.data.repository.TaskRepository;
 import com.solatodo.sola_todoapp.Task.dto.request.CreateTaskRequest;
-import com.solatodo.sola_todoapp.Task.dto.request.UpdateTaskRequest;
+import com.solatodo.sola_todoapp.Task.dto.request.EditTaskRequest;
 import com.solatodo.sola_todoapp.Task.dto.response.CreateTaskResponse;
-import com.solatodo.sola_todoapp.Task.dto.response.DeleteAllTaskResponse;
 import com.solatodo.sola_todoapp.Task.dto.response.DeleteTaskResponse;
-import com.solatodo.sola_todoapp.Task.dto.response.UpdateTaskResponse;
+import com.solatodo.sola_todoapp.Task.dto.response.EditTaskResponse;
+import com.solatodo.sola_todoapp.Task.exception.TaskException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,29 +23,29 @@ public class TaskServiceImpl implements TaskService{
         task.setTaskCategory(createTaskRequest.getTaskCategory());
         task.setContent(createTaskRequest.getContent());
        Task createdTask = taskRepository.save(task);
-        return new CreateTaskResponse("Task created", 201);
+        return new CreateTaskResponse("Created", 201, task.getCreationDate());
     }
 
     @Override
-    public UpdateTaskResponse updateTask(UpdateTaskRequest updateTaskRequest){
-        Task updatedTask = taskRepository.findByTitle(updateTaskRequest.getTitle())
-                .orElseThrow(()-> new TaskException("Task not found"));
-        if(updatedTask.getTitle().equals(updateTaskRequest.getTitle())){
-            taskRepository.save(updatedTask);
-            return new UpdateTaskResponse("updated successfully");
+    public EditTaskResponse editTask(EditTaskRequest editTaskRequest){
+        Task editTask = taskRepository.findByContentEqualsIgnoreCase(editTaskRequest.getContent())
+               .orElseThrow(()-> new TaskException("Not found"));
+        if(editTask.getContent().equals(editTaskRequest.getContent())){
+            editTask.setContent(editTask.getContent());
+            taskRepository.save(editTask);
+           return new EditTaskResponse("Updated",editTask.getCreationDate());
         }else
-           return new UpdateTaskResponse("Please try again");
+            return new EditTaskResponse("error Try again", editTask.getCreationDate());
+
+
     }
 
     @Override
-    public DeleteTaskResponse deleteTask(String title){
-        taskRepository.deleteByTitle(title);
-        return new DeleteTaskResponse("Task deleted");
+    public DeleteTaskResponse deleteTask(String content){
+        taskRepository.deleteByContent(content);
+        return new DeleteTaskResponse("Deleted");
     }
 
-    @Override
-    public DeleteAllTaskResponse deleteAllTask( ){
-        taskRepository.deleteAll();
-        return new DeleteAllTaskResponse("Deleted");
-    }
+
+
 }
