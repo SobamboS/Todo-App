@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 public class CreateTaskResponse{
+    private String content;
 private String message;
 private int statusCode;
 private LocalDateTime creationDate = LocalDateTime.now();

@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface TaskRepository extends MongoRepository<Task, String>{
-    Optional <Task> findByContentEqualsIgnoreCase(String content);
+    Task findByContentEqualsIgnoreCase(String content);
 
     void deleteByContent(String content);
 

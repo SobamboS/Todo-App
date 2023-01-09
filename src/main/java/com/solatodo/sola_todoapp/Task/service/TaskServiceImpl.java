@@ -7,7 +7,7 @@ import com.solatodo.sola_todoapp.Task.dto.request.EditTaskRequest;
 import com.solatodo.sola_todoapp.Task.dto.response.CreateTaskResponse;
 import com.solatodo.sola_todoapp.Task.dto.response.DeleteTaskResponse;
 import com.solatodo.sola_todoapp.Task.dto.response.EditTaskResponse;
-import com.solatodo.sola_todoapp.Task.exception.TaskException;
+import com.solatodo.sola_todoapp.Task.exception.UpdateTaskException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,23 +19,21 @@ public class TaskServiceImpl implements TaskService{
     @Override
     public CreateTaskResponse createTask(CreateTaskRequest createTaskRequest){
         Task task = new Task();
-        task.setTaskStatus(createTaskRequest.getTaskStatus());
-        task.setTaskCategory(createTaskRequest.getTaskCategory());
         task.setContent(createTaskRequest.getContent());
+        task.setCreationDate(createTaskRequest.getCreationDate());
        Task createdTask = taskRepository.save(task);
-        return new CreateTaskResponse("Created", 201, task.getCreationDate());
+        return new CreateTaskResponse(task.getContent(),"Created", 201, task.getCreationDate());
     }
 
     @Override
     public EditTaskResponse editTask(EditTaskRequest editTaskRequest){
-        Task editTask = taskRepository.findByContentEqualsIgnoreCase(editTaskRequest.getContent())
-               .orElseThrow(()-> new TaskException("Not found"));
-        if(editTask.getContent().equals(editTaskRequest.getContent())){
-            editTask.setContent(editTask.getContent());
+        Task editTask = taskRepository.findByContentEqualsIgnoreCase(editTaskRequest.getContent());
+        if(editTask == null) throw  new UpdateTaskException(String.format("%s does not exist", editTaskRequest.getContent()));
+            editTask.setContent(editTaskRequest.getContent());
             taskRepository.save(editTask);
            return new EditTaskResponse("Updated",editTask.getCreationDate());
-        }else
-            return new EditTaskResponse("error Try again", editTask.getCreationDate());
+
+           // return new EditTaskResponse("error Try again", editTask.getCreationDate());
 
 
     }

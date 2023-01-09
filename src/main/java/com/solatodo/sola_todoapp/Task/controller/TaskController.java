@@ -16,7 +16,7 @@ public class TaskController{
     private TaskService taskService;
 
     @PostMapping("/create_task")
-    public CreateTaskResponse createNote(@RequestBody CreateTaskRequest createTaskRequest){
+    public CreateTaskResponse createTask(@RequestBody CreateTaskRequest createTaskRequest){
         return taskService.createTask(createTaskRequest);
     }
 
