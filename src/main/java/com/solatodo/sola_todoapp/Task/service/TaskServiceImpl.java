@@ -22,7 +22,7 @@ public class TaskServiceImpl implements TaskService{
         task.setContent(createTaskRequest.getContent());
        task.setCreationDate(createTaskRequest.getCreationDate());
        Task createdTask = taskRepository.save(task);
-        return new CreateTaskResponse(task.getContent(),"Created", 201,task.getCreationDate());
+        return new CreateTaskResponse(createdTask.getContent(),"Created", 201,createdTask.getCreationDate());
     }
 
     @Override
@@ -30,8 +30,9 @@ public class TaskServiceImpl implements TaskService{
         Task editTask = taskRepository.findByContentEqualsIgnoreCase(editTaskRequest.getContent());
         if(editTask == null) throw  new UpdateTaskException(String.format("%s does not exist", editTaskRequest.getContent()));
         editTask.setContent(editTaskRequest.getNewContent());
-           Task editedTask = taskRepository.save(editTask);
-           return new EditTaskResponse("Updated");
+        editTask.setCreationDate(editTaskRequest.getNewDate());
+           taskRepository.save(editTask);
+           return new EditTaskResponse(editTask.getContent(),"Edited",editTask.getCreationDate());
 
     }
 

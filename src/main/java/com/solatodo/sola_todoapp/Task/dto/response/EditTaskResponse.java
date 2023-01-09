@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 public class EditTaskResponse{
+    private String newContent;
     private String message;
-   // private LocalDateTime creationDate = LocalDateTime.now();
+    private LocalDateTime newDate = LocalDateTime.now();
 }
