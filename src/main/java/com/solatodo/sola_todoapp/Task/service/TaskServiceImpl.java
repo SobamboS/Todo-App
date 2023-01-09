@@ -29,8 +29,8 @@ public class TaskServiceImpl implements TaskService{
     public EditTaskResponse editTask(EditTaskRequest editTaskRequest){
         Task editTask = taskRepository.findByContentEqualsIgnoreCase(editTaskRequest.getContent());
         if(editTask == null) throw  new UpdateTaskException(String.format("%s does not exist", editTaskRequest.getContent()));
-        editTask.setContent(editTaskRequest.getContent());
-            taskRepository.save(editTask);
+        editTask.setContent(editTaskRequest.getNewContent());
+           Task editedTask = taskRepository.save(editTask);
            return new EditTaskResponse("Updated");
 
     }

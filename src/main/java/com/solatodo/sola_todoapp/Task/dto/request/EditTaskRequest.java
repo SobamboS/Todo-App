@@ -4,6 +4,7 @@ import lombok.Data;
 
 @Data
 public class EditTaskRequest{
+    private String newContent;
 
     private String content;
 }
